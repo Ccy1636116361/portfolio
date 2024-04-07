@@ -3,8 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { error } from "@sveltejs/kit";
 import { contactFormSchema } from "./schema";
 import { zod } from "sveltekit-superforms/adapters";
-import { createTransport } from "nodemailer";
-import { GMAIL_APP_PASS, MAILTRAP_TOKEN } from "$env/static/private";
+import { MAILTRAP_TOKEN } from "$env/static/private";
 import { MailtrapClient } from "mailtrap";
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -24,26 +23,6 @@ export const actions: Actions = {
 
     const { name, email, message: messageText } = form.data;
 
-    // const mailMessage = {
-    //   from: "sender@server.com",
-    //   to: "ccy3691@gmail.com",
-    //   subject: "Message Recived via website!",
-    //   html: `${messageText}<br><br>sent from: ${name}<br>contact email: ${email}`,
-    // };
-
-    // try {
-    //   const transporter = createTransport({
-    //     service: "Gmail",
-    //     host: "smtp.gmail.com",
-    //     port: 465,
-    //     secure: true,
-    //     auth: {
-    //       user: "ccy3691@gmail.com",
-    //       pass: GMAIL_APP_PASS,
-    //     },
-    //   });
-
-    //   await transporter.sendMail(mailMessage);
     try {
       const client = new MailtrapClient({ token: MAILTRAP_TOKEN });
 
