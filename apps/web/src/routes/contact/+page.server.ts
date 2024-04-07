@@ -4,7 +4,6 @@ import { error } from "@sveltejs/kit";
 import { contactFormSchema } from "./schema";
 import { zod } from "sveltekit-superforms/adapters";
 import { MAILTRAP_TOKEN } from "$env/static/private";
-import { MailtrapClient } from "mailtrap";
 
 export const load: PageServerLoad = async ({ locals }) => {
   return {
@@ -24,24 +23,22 @@ export const actions: Actions = {
     const { name, email, message: messageText } = form.data;
 
     try {
-      const client = new MailtrapClient({ token: MAILTRAP_TOKEN });
-
-      const sender = {
-        email: "mailtrap@demomailtrap.com",
-        name: "Portfilio website",
-      };
-      const recipients = [
-        {
-          email: "ccy3691@gmail.com",
+      await fetch("https://send.api.mailtrap.io/api/send", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${MAILTRAP_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      ];
-
-      await client.send({
-        from: sender,
-        to: recipients,
-        subject: "Message Recived via website!",
-        html: `${messageText}<br><br>sent from: ${name}<br>contact email: ${email}`,
-        category: "Integration Test",
+        body: JSON.stringify({
+          from: {
+            email: "mailtrap@demomailtrap.com",
+            name: "Portfolio",
+          },
+          to: [{ email: "ccy3691@gmail.com" }],
+          subject: "Message Recived via website!",
+          html: `${messageText}<br><br>sent from: ${name}<br>contact email: ${email}`,
+          category: "Portfolio Website",
+        }),
       });
 
       return message(form, "Message Sent!");
