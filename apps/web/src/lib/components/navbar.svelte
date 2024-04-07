@@ -5,6 +5,7 @@
 	import {Menu, Sun, Moon} from 'lucide-svelte'
 	import { toggleMode } from "mode-watcher";
   	import { Button } from "$lib/components/ui/button/index.js";
+  import type { User } from "$lib/models/User";
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
@@ -18,11 +19,7 @@
 
 	$: currentPath = $page.url.pathname;
 
-	export let hasUser = false;
-
-	if(hasUser){
-		routes.push({label: 'Dashboard', path: '/dashboard'});
-	}
+	export let user: User | undefined;
 	
 </script>
 
@@ -38,6 +35,11 @@
                 {route.label}
             </a>
         {/each}
+		{#if !!user}
+			<a href='/dashboard' class:active={currentPath.startsWith('/dashboard')}>
+				{'Dashboard'}
+			</a>
+		{/if}
 		<Button on:click={toggleMode} variant="outline" size="icon">
 			<Sun
 			  class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
@@ -62,6 +64,13 @@
 						</a>
 					</DropdownMenu.Item>
 				{/each}
+				{#if !!user}
+					<DropdownMenu.Item>
+						<a style="width: 100%;" href='/dashboard' class:active={currentPath.startsWith('/dashboard')}>
+							{'Dashboard'}
+						</a>
+					</DropdownMenu.Item>
+				{/if}
 				<DropdownMenu.Item class="cursor-pointer" on:click={toggleMode}>
 					<Button class="m-auto" variant="outline" size="icon">
 						<Sun

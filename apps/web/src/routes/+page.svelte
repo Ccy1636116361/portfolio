@@ -8,7 +8,7 @@
 </svelte:head>
 
 <div class="flex flex-col sm:p-20 gap-4">
-    <span class="text-primary text-xl">Hello! I am</span>
+    <span class="text-primary text-xl">Hello! I'm</span>
     <span class="text-8xl">Chris Young</span>
     <div class="flex flex-col">
         <span class="text-primary">Full Stack Developer</span>

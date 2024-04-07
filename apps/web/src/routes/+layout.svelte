@@ -6,7 +6,8 @@
   import { page } from "$app/stores";
   import { Toaster } from "$lib/components/ui/sonner";
 
-  const user = $page.data.user;
+  //const user = $page.data.user;
+  $: ({ user } = $page.data)
 </script>
 
 <Toaster />
@@ -16,7 +17,7 @@
   <div class="pb-12">
     <div class="border-b">
       <div class="flex h-16 items-center px-4 justify-center">
-        <Navbar class="mx-6" hasUser={!!user} />
+        <Navbar class="mx-6" bind:user={user} />
       </div>
     </div>
     <div class="p-8 h-full">

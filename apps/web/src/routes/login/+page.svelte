@@ -11,9 +11,11 @@
 
   const form = superForm(data.form, {
       validators: zodClient(loginFormSchema),
+      delayMs: 200,
+      timeoutMs: 8000
   });
 
-  const { form: formData, allErrors } = form;
+  const { form: formData, allErrors, delayed, enhance } = form;
 
 </script>
 <svelte:head>
@@ -22,11 +24,11 @@
 
 <div class="px-2 flex flex-col gap-3 items-center">
   <H1>Login</H1>
-  <form method="POST" class="w-full flex flex-col gap-3 max-w-96">
+  <form use:enhance method="POST" class="w-full flex flex-col gap-3 max-w-96">
     <Form.Field {form} name="email">
       <Form.Control let:attrs>
         <Form.Label>Email</Form.Label>
-        <Input {...attrs} bind:value={$formData.email} />
+        <Input disabled={$delayed} {...attrs} bind:value={$formData.email} />
       </Form.Control>
       <Form.Description />
       <Form.FieldErrors />
@@ -34,7 +36,7 @@
     <Form.Field {form} name="password">
       <Form.Control let:attrs>
         <Form.Label>Password</Form.Label>
-        <Input type="password" {...attrs} bind:value={$formData.password} />
+        <Input disabled={$delayed} type="password" {...attrs} bind:value={$formData.password} />
       </Form.Control>
       <Form.Description />
       <Form.FieldErrors />
@@ -50,6 +52,6 @@
         {/each}
       </ul>
     {/if}
-    <Form.Button class="w-full">Submit</Form.Button>
+    <Form.Button disabled={$delayed} class="w-full">Submit</Form.Button>
   </form>
 </div>
