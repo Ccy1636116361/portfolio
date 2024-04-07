@@ -32,8 +32,9 @@ export const actions: Actions = {
       if (!event.locals.pb.authStore.model?.verified) {
         return setError(form, "", "Email not verified!");
       }
-    } catch (e) {
-      throw error(500, "Something went wrong!");
+    } catch (err: any) {
+      const error = err as { response: { message: string } };
+      return setError(form, "", error.response.message);
     }
 
     throw redirect(303, "/dashboard");
