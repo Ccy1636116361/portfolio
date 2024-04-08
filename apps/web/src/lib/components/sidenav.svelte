@@ -17,7 +17,9 @@
         </a>
     </div>
     <div class="h-10">
-        Resume
+        <a href="/dashboard/links" class:active={currentPath == "/dashboard/links"}>
+            Links
+        </a>
     </div>
 </div>
 
