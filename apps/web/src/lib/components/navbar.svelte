@@ -2,10 +2,12 @@
   	import { page } from "$app/stores";
 	import { cn } from "$lib/utils.js";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import {Menu, Sun, Moon} from 'lucide-svelte'
+	import {Menu, Sun, Moon, User as UserComp, FileSpreadsheet, PenBoxIcon, Contact, Link, Paintbrush2, LogOut, LogIn} from 'lucide-svelte'
 	import { toggleMode } from "mode-watcher";
   	import { Button } from "$lib/components/ui/button/index.js";
   import type { User } from "$lib/models/User";
+  import CommandMenu from "./command-menu.svelte";
+  import type { MenuOptions } from "$lib/models/MenuOptions";
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
@@ -20,16 +22,45 @@
 	$: currentPath = $page.url.pathname;
 
 	export let user: User | undefined;
+
+	let options: MenuOptions = [
+        {
+			groupName: 'Pages', 
+			protected: false, 
+			actions: [
+            	{title: 'About', subtitle: 'About me!', link: '/about', icon: UserComp},
+            	{title: 'Projects', subtitle: 'Projects I have worked on', link: '/projects', icon: PenBoxIcon},
+            	{title: 'Resume', subtitle: 'My Work History', link: '/resume', icon: FileSpreadsheet},
+            	{title: 'Contact', subtitle: 'Send me a message', link: '/contact', icon: Contact},
+				{title: 'Change Theme', subtitle: 'Switch the Theme', action: toggleMode, icon: Paintbrush2},
+				{title: 'Login', subtitle: 'Login to dashboard', link: '/login', icon: LogIn, hideLoggedIn: true},
+
+			]
+		},
+		{
+			groupName: 'Admin',
+			protected: true,
+			actions: [
+            	{title: 'Links', subtitle: 'Saved Links', link: '/dashboard/links', icon: Link},
+				{title: 'Logout', subtitle: 'See you next time!', link: '/logout', method: 'POST', icon: LogOut}
+
+			]
+          } 
+        ]
 	
 </script>
 
-<nav class={cn("flex items-center justify-start w-full", className)}>
+<nav class={cn("flex items-center w-full gap-2", className)}>
 	<div class="mr-auto">
         <a href="/">
 			Chris Young
 		</a>
     </div>
-    <div class=" items-center justify-center space-x-4 hidden sm:flex">
+	<div class="hidden md:flex">
+		<CommandMenu {user} {options} />
+	</div>
+
+    <div class="items-center justify-center space-x-4 hidden md:flex">
         {#each routes as route}
             <a href={route.path} class:active={currentPath.startsWith(route.path)}>
                 {route.label}
@@ -50,7 +81,7 @@
 			<span class="sr-only">Toggle theme</span>
 		</Button>
     </div>
-	<div class=" items-center justify-center space-x-4 flex sm:hidden">
+	<div class=" items-center justify-center space-x-4 flex md:hidden">
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>        
 				<Menu class="cursor-pointer" />

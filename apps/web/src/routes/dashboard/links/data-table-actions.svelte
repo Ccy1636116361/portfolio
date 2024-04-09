@@ -31,6 +31,7 @@
   }>
 
   const delFormEle = superForm(delForm, {
+      id: 'delete',
       validators: zodClient(deleteLinksFormSchema),
       onSubmit({formData}) {
         formData.set('id', id)
@@ -50,6 +51,7 @@
   const { form: formData, enhance ,allErrors, delayed, isTainted  } = delFormEle;
   
   const editFormEle = superForm(editForm, {
+      id: 'edit',
       validators: zodClient(editLinksFormSchema),
       onSubmit({formData}) {
         formData.set('id', id)

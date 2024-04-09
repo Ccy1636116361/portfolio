@@ -7,7 +7,7 @@
   import { toast } from "svelte-sonner";
   import { Input } from '$lib/components/ui/input';
   import { createTable, Render, Subscribe, createRender, HeaderRow, BodyRow, type TableAttributes, type TableBodyAttributes } from "svelte-headless-table";
-  import type { AnyPlugins } from "svelte-headless-table/plugins";
+  import { type AnyPlugins } from "svelte-headless-table/plugins";
   import { readable, type Readable } from "svelte/store";
   import * as Table from "$lib/components/ui/table";
   import DataTableActions from "./data-table-actions.svelte";
@@ -16,6 +16,7 @@
   export let data: PageData;
 
   const form = superForm(data.addForm, {
+      id: 'add',
       validators: zodClient(linksFormSchema),
       onUpdated({form}) {
           if(form.message)
@@ -40,6 +41,7 @@
 
   function initTable() {
     return new Promise<void>((res) => {
+      
       const table = createTable(readable(data.links));
 
       const columns = table.createColumns([
@@ -56,11 +58,13 @@
           header: "URL",
         }),
         table.column({
+          id: 'actions',
           accessor: ({ id, url, shortcut }) => {return {id, url, shortcut}},
           header: "",
           cell: ({ value }) => {
             return createRender(DataTableActions, { id: value.id, url: value.url, shortcut: value.shortcut, delForm: data.delForm, editForm: data.editForm });
-          }})
+          },
+        }),
       ]);
 
       const obj = table.createViewModel(columns);
@@ -114,17 +118,17 @@
       <div class="flex w-full justify-center">
         Loading...
       </div>
-    {:then value}
+    {:then _}
       <div class="rounded-md border">
         <Table.Root {...$tableAttrs}>
           <Table.Header>
-            {#each $headerRows as headerRow}
-              <Subscribe rowAttrs={headerRow.attrs()}>
+            {#each $headerRows as headerRow }
+              <Subscribe rowProps={headerRow.props()} let:rowProps rowAttrs={headerRow.attrs()} >
                 <Table.Row>
                   {#each headerRow.cells as cell (cell.id)}
-                    <Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
+                    <Subscribe let:props attrs={cell.attrs()} let:attrs props={cell.props()}>
                       <Table.Head {...attrs}>
-                        <Render of={cell.render()} />
+                          <Render of={cell.render()} />
                       </Table.Head>
                     </Subscribe>
                   {/each}

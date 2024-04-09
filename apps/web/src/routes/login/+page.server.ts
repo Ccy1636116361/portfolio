@@ -6,7 +6,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({ locals }) => {
   if (locals.user) {
-    throw redirect(303, "/dashboard");
+    throw redirect(300, "/dashboard");
   }
 
   return {

@@ -39,7 +39,9 @@ export const actions: Actions = {
       throw redirect(303, "/login");
     }
 
-    const form = await superValidate(event, zod(linksFormSchema));
+    const form = await superValidate(event, zod(linksFormSchema), {
+      id: "add",
+    });
     if (!form.valid) {
       return fail(400, {
         form,
@@ -60,7 +62,9 @@ export const actions: Actions = {
       throw redirect(303, "/login");
     }
 
-    const form = await superValidate(event, zod(deleteLinksFormSchema));
+    const form = await superValidate(event, zod(deleteLinksFormSchema), {
+      id: "delete",
+    });
     if (!form.valid) {
       return fail(400, {
         form,
@@ -82,7 +86,9 @@ export const actions: Actions = {
       throw redirect(303, "/login");
     }
 
-    const form = await superValidate(event, zod(editLinksFormSchema));
+    const form = await superValidate(event, zod(editLinksFormSchema), {
+      id: "edit",
+    });
     if (!form.valid) {
       return fail(400, {
         form,

@@ -1,10 +1,14 @@
-<script>
+<script lang="ts">
   import "../app.pcss";
   import Navbar from "$lib/components/navbar.svelte"
   import Footer from "$lib/components/footer.svelte";
+  import CommandMenu from "$lib/components/command-menu.svelte";
+
   import { ModeWatcher } from "mode-watcher";
   import { page } from "$app/stores";
   import { Toaster } from "$lib/components/ui/sonner";
+  import type {MenuOptions} from '$lib/models/MenuOptions';
+  import { User } from "lucide-svelte";
 
   //const user = $page.data.user;
   $: ({ user } = $page.data)
