@@ -18,10 +18,14 @@
             event.preventDefault();
             open = false;
         }
-        if(event.ctrlKey && event.key === 'k'){
+        if(!isMac && event.ctrlKey && event.key === 'k'){
+            event.preventDefault();
+            open = !open
+        } else if(isMac && event.metaKey && event.key === 'k'){
             event.preventDefault();
             open = !open
         }
+        
     }
 
     const keydown = (event:KeyboardEvent) => {
